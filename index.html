@@ -1,0 +1,198 @@
+	<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css
+">
+
+	<script  src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js
+"></script>
+
+<style type="text/css">
+	.bootstrap-tagsinput {
+    width: 100%;
+}
+.bootstrap-tagsinput {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    display: inline-block;
+    padding: 4px 6px;
+    color: #555;
+    vertical-align: middle;
+    border-radius: 4px;
+    max-width: 100%;
+    line-height: 22px;
+    cursor: text;
+}
+.bootstrap-tagsinput .tag {
+    margin-right: 2px;
+    color: white;
+}
+.label-info {
+    background-color: #5bc0de;
+}
+.label {
+     display: -webkit-inline-box; 
+    padding: .2em .6em .3em;
+    /* font-size: 75%; */
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+.bootstrap-tagsinput .tag [data-role="remove"] {
+    margin-left: 8px;
+    cursor: pointer;
+    background: black;
+}
+.bootstrap-tagsinput input {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    padding: 0 6px;
+    margin: 0;
+    width: auto;
+    max-width: inherit;
+}
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+</style>
+  </head>
+
+  <body ng-app='myApp'>
+
+  	<div ng-controller="myCtrl">
+  		<h1>Hello Plunker!</h1>
+	<div class="bs-example">
+  		<div class="gene_input_data bootstrap-tagsinput">
+  			<span ng-repeat="y in myWelcome" id="{{y.id}}" class="tag label label-info">{{y.name}}<span data-role="remove"></span></span> 
+  			
+  			<input id="gene_input" type="text" placeholder="">
+  		</div>
+    </div>
+
+
+      <div class="gene_dropdown">
+      	<ul class="list-group">
+			<li ng-repeat="x in myWelcome" id='{{x.id}}' class="list-group-item">{{x.name}}</li>
+			
+			
+		</ul>
+      </div>
+
+      <button>click</button>
+  	</div>
+    <script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function($scope, $http) {
+		  $http.get("http://jsonplaceholder.typicode.com/users").then(function (response) {
+		      $scope.myWelcome = response.data;
+			$scope.selected_gene_id1 = "";
+
+		      for (var i =8 ;i < $scope.myWelcome.length;  i++) {
+		  		$scope.selected_gene_id1 += $scope.myWelcome[i].id + ','
+
+		  		
+		  	}
+		  	$scope.selected_gene_array = $scope.selected_gene_id1.split(',');
+				    $scope.selected_gene_array.pop();
+				    $scope.gene_array1 =$scope.selected_gene_array; 
+		  	console.log($scope.gene_array1);
+
+		  	 for (var i =8 ;i < $scope.myWelcome.length;  i++) {
+		  		$scope.selected_gene_name1 += $scope.myWelcome[i].name + ','
+
+		  		
+		  	}
+		  	
+		  	console.log($scope.selected_gene_name1);
+
+		  		$("button").click(function () {
+		  			var array1 = $scope.gene_array.toString();
+					var array2 = $scope.selected_gene_id1.toString();
+
+					var str2 = array2 + array1;
+					var arrrr = str2.split(',')
+					    // Merges both arrays and gets unique items
+					function removeDuplicates(arr){
+					    let unique_array = []
+					    for(let i = 0;i < arr.length; i++){
+					        if(unique_array.indexOf(arr[i]) == -1){
+					            unique_array.push(arr[i])
+					        }
+					    }
+					    return unique_array
+					}
+
+					console.log(removeDuplicates(arrrr));
+				    
+		  			
+		  		})
+		  	
+		  });
+
+
+
+		  $(document).ready(function(){
+      		$(".gene_dropdown").hide();
+      		$('.gene_input_data span').click(function () {
+      			alert($(this).attr('id'));
+      		})
+
+		    $("#gene_input").focus(function(){
+      			$(".gene_dropdown").show();
+      			var selected_gene = $("#gene_input").val();
+      			var selected_gene_id = '';
+      			$(".gene_dropdown li").hover(function(){
+				    $(this).css("background-color", "yellow");
+				    }, function(){
+				    $(this).css("background-color", "white");
+				});
+
+      			$(".gene_dropdown li").click(function() {
+				    
+				    // alert($(this).attr('id')); // jQuery's .attr() method, same but more verbose   <span class="tag label label-info">Washington<span data-role="remove"></span></span>
+				   
+				    // alert($(this).text()); // gets text contents of clicked li
+				    selected_gene_id += $(this).attr('id') + ",";
+				    selected_gene += '<span class="tag label label-info">'+$(this).text()+'<span data-role="remove"></span></span>'  ;
+
+				    $(this).remove();
+				    $(".bootstrap-tagsinput").prepend(selected_gene);
+
+				    array = selected_gene_id.split(',');
+				    array.pop();
+				    $scope.gene_array =array; 
+
+				    console.log($scope.gene_array);
+				});
+		    });
+		});	
+
+
+
+
+
+
+
+		});
+	</script>
+
+
+      <script>
+      	
+
+
+      </script>
+  </body>
+
+</html>
